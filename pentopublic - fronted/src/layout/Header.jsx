@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import { LogOut, Search, User, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
@@ -16,11 +15,9 @@ const Header = ({ search, setSearch, setFilter }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // ✅ Only run subscription check if user is loaded
   useEffect(() => {
     const fetchSubscription = async () => {
       if (!user?.userId || user.role !== "reader") return;
-
       try {
         const res = await axios.get(
           `${API_BASE}/Reader/${user.userId}/subscription`
@@ -30,18 +27,15 @@ const Header = ({ search, setSearch, setFilter }) => {
         console.error("Error fetching subscription", err);
       }
     };
-
     fetchSubscription();
   }, [user]);
 
-  // ✅ Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -74,10 +68,10 @@ const Header = ({ search, setSearch, setFilter }) => {
   ];
 
   return (
-    <header className="bg-white shadow px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-4 sticky top-0 z-20 border-b">
+    <header className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4 sticky top-0 z-20 shadow-lg">
       <div className="flex items-center gap-4">
         <h1
-          className="text-2xl font-bold cursor-pointer text-blue-600"
+          className="text-2xl font-bold cursor-pointer bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
           onClick={() => {
             setFilter("all");
             navigate("/");
@@ -92,8 +86,8 @@ const Header = ({ search, setSearch, setFilter }) => {
               key={value}
               onClick={() => setFilter(value)}
               className={clsx(
-                "px-3 py-1.5 rounded-full text-gray-700 border hover:bg-blue-50 transition",
-                "border-gray-300"
+                "px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 hover:bg-slate-800 hover:border-slate-500 transition-all duration-200",
+                "hover:shadow-md hover:shadow-purple-500/20"
               )}
             >
               {label}
@@ -103,21 +97,21 @@ const Header = ({ search, setSearch, setFilter }) => {
       </div>
 
       <div className="relative w-full md:max-w-md">
-        <div className="flex items-center border rounded-full px-3 py-2 shadow">
-          <Search size={16} className="mr-2 text-gray-400" />
+        <div className="flex items-center border border-slate-700 rounded-full px-3 py-2 shadow-sm bg-slate-800 focus-within:ring-2 focus-within:ring-blue-500/50 transition-all duration-200">
+          <Search size={16} className="mr-2 text-slate-400" />
           <Input
             type="text"
             placeholder="Search books or authors..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border-none outline-none w-full"
+            className="border-none outline-none w-full bg-transparent text-slate-100 placeholder-slate-500"
           />
         </div>
       </div>
 
       <div className="relative" ref={dropdownRef}>
         <button
-          className="flex items-center gap-2 border rounded-full px-3 py-2 bg-white hover:bg-gray-100 transition"
+          className="flex items-center gap-2 border border-slate-700 rounded-full px-3 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all duration-200 hover:shadow-lg hover:shadow-purple-500/20"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
           <User size={18} />
@@ -131,45 +125,23 @@ const Header = ({ search, setSearch, setFilter }) => {
               className="fixed inset-0 z-10"
               onClick={() => setDropdownOpen(false)}
             />
-            <div className="absolute right-0 mt-2 w-64 bg-white border rounded-lg shadow z-50 overflow-hidden">
-              <div className="p-4 border-b">
-                <p className="font-semibold">{user?.userName}</p>
-                <p className="text-sm text-gray-500 capitalize">{user?.role}</p>
+            <div className="absolute right-0 mt-2 w-64 bg-slate-900 border border-slate-700 rounded-lg shadow-lg shadow-purple-500/10 z-50 overflow-hidden">
+              <div className="p-4 border-b border-slate-700">
+                <p className="font-semibold text-slate-100">{user?.userName}</p>
+                <p className="text-sm text-slate-400 capitalize">{user?.role}</p>
               </div>
 
               <button
                 onClick={handleProfileClick}
-                className="w-full text-left px-4 py-3 hover:bg-gray-100"
+                className="w-full text-left px-4 py-3 hover:bg-slate-800 text-slate-300 transition-all"
               >
                 Your Profile
               </button>
 
-              {user?.role === "reader" && (
-                <div
-                  onClick={handleSubscriptionClick}
-                  className="px-4 py-3 cursor-pointer hover:bg-gray-100 border-y"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">
-                      {isSubscribed ? "✅" : "❌"}
-                    </span>
-                    <div>
-                      <p className="font-medium">
-                        {isSubscribed ? "Premium Member" : "Free Member"}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {isSubscribed
-                          ? "Enjoy unlimited access"
-                          : "Click to upgrade"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
+             
               <button
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-3 text-red-500 hover:bg-red-50"
+                className="w-full text-left px-4 py-3 text-red-400 hover:bg-red-500/10 transition-all"
               >
                 <LogOut size={16} className="inline mr-2" />
                 Sign Out

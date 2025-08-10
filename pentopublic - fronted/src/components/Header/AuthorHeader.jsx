@@ -30,9 +30,9 @@ const AuthorHeader = () => {
   };
 
   return (
-    <header className="bg-white shadow px-4 py-2 flex items-center justify-between sticky top-0 z-20 border-b">
+    <header className="bg-slate-900 border-b border-slate-800 shadow-lg px-4 py-2 flex items-center justify-between sticky top-0 z-20">
       <h1
-        className="text-2xl font-bold cursor-pointer text-blue-600"
+        className="text-2xl font-bold cursor-pointer bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
         onClick={() => navigate("/writer-dashboard")}
       >
         PenToPublic ✍️
@@ -40,7 +40,7 @@ const AuthorHeader = () => {
 
       <div className="relative" ref={dropdownRef}>
         <button
-          className="flex items-center gap-2 border rounded-full px-3 py-2 bg-white hover:bg-gray-100 transition"
+          className="flex items-center gap-2 border border-slate-700 rounded-full px-3 py-2 bg-slate-800 hover:bg-slate-700 transition text-slate-100"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
           <User size={18} />
@@ -54,22 +54,22 @@ const AuthorHeader = () => {
               className="fixed inset-0 z-10"
               onClick={() => setDropdownOpen(false)}
             />
-            <div className="absolute right-0 mt-2 w-64 bg-white border rounded-lg shadow z-50 overflow-hidden">
-              <div className="p-4 border-b">
-                <p className="font-semibold">{user?.userName}</p>
-                <p className="text-sm text-gray-500 capitalize">{user?.role}</p>
+            <div className="absolute right-0 mt-2 w-64 bg-slate-900 border border-slate-700 rounded-lg shadow-lg z-50 overflow-hidden">
+              <div className="p-4 border-b border-slate-700">
+                <p className="font-semibold text-slate-100">{user?.userName}</p>
+                <p className="text-sm text-slate-400 capitalize">{user?.role}</p>
               </div>
 
               <button
                 onClick={handleProfileClick}
-                className="w-full text-left px-4 py-3 hover:bg-gray-100"
+                className="w-full text-left px-4 py-3 hover:bg-slate-800 text-slate-100"
               >
                 Your Profile
               </button>
 
               <button
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-3 text-red-500 hover:bg-red-50"
+                className="w-full text-left px-4 py-3 text-red-400 hover:bg-red-900/30 hover:text-red-300 flex items-center"
               >
                 <LogOut size={16} className="inline mr-2" />
                 Sign Out

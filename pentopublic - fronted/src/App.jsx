@@ -15,6 +15,8 @@ import VerifyOtp from "./components/Auth/VerifyOtp";
 import ResetPassword from "./components/Auth/ResetPassword";
 import About from "./Header/About";
 import Contact from "./Header/Contact";
+import ReaderDashboardSub from "./components/Book/ReaderDashboardSub";
+import PaymentPage from "./pages/PaymentPage";
 
 function App() {
   return (
@@ -29,7 +31,8 @@ function App() {
       <Route path="/contact" element={<Contact />} />
       <Route path="/subscription" element={<Subscription />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
-
+<Route path="/reader" element={<ReaderDashboardSub />} />
+<Route path="/payment" element={<PaymentPage />} />
       {/* Protected Dashboard Pages */}
       <Route
         path="/reader-dashboard"

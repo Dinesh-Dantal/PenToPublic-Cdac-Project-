@@ -1,46 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Eye, EyeOff, AlertCircle, Sun, Moon } from "lucide-react"; // Import necessary icons
+import { Eye, EyeOff, AlertCircle, Sun, Moon } from "lucide-react";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State for showing/hiding password
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for showing/hiding confirm password
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const email = localStorage.getItem("resetEmail");
-  const [theme, setTheme] = useState('light'); // State for theme
+  const [theme, setTheme] = useState("light");
 
-  // Effect to set initial theme from localStorage or system preference
   useEffect(() => {
-    const storedTheme = localStorage.getItem('theme');
+    const storedTheme = localStorage.getItem("theme");
     if (storedTheme) {
       setTheme(storedTheme);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("dark");
     }
   }, []);
 
-  // Effect to apply theme class to documentElement and save to localStorage
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem('theme', theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Function to toggle theme
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   const handleReset = async () => {
-    setError(""); // Clear previous errors
+    setError("");
 
     if (!password || !confirm) {
       setError("Please enter both new password and confirm password.");
@@ -52,58 +49,52 @@ export default function ResetPassword() {
       return;
     }
 
-    // Basic password validation (can be expanded as needed)
     if (password.length < 8) {
       setError("Password must be at least 8 characters long.");
       return;
     }
 
-    setIsLoading(true); // Set loading to true
+    setIsLoading(true);
 
     try {
       await axios.post("/api/ForgotPassword/reset-password", { email, newPassword: password });
-      localStorage.removeItem("resetEmail"); // Clear email from local storage after successful reset
+      localStorage.removeItem("resetEmail");
       navigate("/login");
     } catch (err) {
       console.error(err);
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message); // Use specific error message from backend
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
       } else {
         setError("Failed to reset password. Please try again.");
       }
     } finally {
-      setIsLoading(false); // Set loading to false
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-off-white-light dark:bg-brown-dark px-4">
-      <div className="bg-white dark:bg-brown-700 p-6 rounded-2xl shadow-lg w-full max-w-md">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-brown-dark dark:text-off-white">Reset Password</h2>
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="p-2 rounded-full text-brown-dark dark:text-off-white hover:bg-brown-100 dark:hover:bg-brown-600 transition-colors duration-200"
-          >
-            {theme === 'dark' ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
-          </button>
+    <div className="bg-slate-900 text-slate-100 py-16 px-6 min-h-screen flex items-center justify-center">
+      <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-lg w-full max-w-md p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            Reset Password
+          </h2>
+          
         </div>
-        
+
+        {/* New Password */}
         <div className="relative mb-3">
           <input
             type={showPassword ? "text" : "password"}
             placeholder="New password"
-            className="w-full p-2 border rounded-lg pr-10
-              border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-600
-              bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white focus:outline-none focus:ring-2"
+            className="w-full px-4 py-3 border rounded-lg pr-10 border-slate-700 bg-slate-900 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brown-500 dark:text-brown-300 hover:text-brown-700 dark:hover:text-brown-100 focus:outline-none"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-200 focus:outline-none"
           >
             {showPassword ? (
               <EyeOff className="h-4 w-4" />
@@ -113,20 +104,19 @@ export default function ResetPassword() {
           </button>
         </div>
 
+        {/* Confirm Password */}
         <div className="relative mb-3">
           <input
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm password"
-            className="w-full p-2 border rounded-lg pr-10
-              border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-600
-              bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white focus:outline-none focus:ring-2"
+            className="w-full px-4 py-3 border rounded-lg pr-10 border-slate-700 bg-slate-900 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brown-500 dark:text-brown-300 hover:text-brown-700 dark:hover:text-brown-100 focus:outline-none"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-200 focus:outline-none"
           >
             {showConfirmPassword ? (
               <EyeOff className="h-4 w-4" />
@@ -136,14 +126,17 @@ export default function ResetPassword() {
           </button>
         </div>
 
+        {/* Error Message */}
         {error && (
-          <p className="text-red-500 dark:text-red-300 text-sm mb-2 flex items-center space-x-1">
+          <p className="bg-red-900/30 border border-red-500/50 text-red-300 px-3 py-2 rounded-lg flex items-center space-x-2 mb-4 shadow-lg text-sm">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{error}</span>
           </p>
         )}
+
+        {/* Submit Button */}
         <button
-          className="w-full bg-brown-600 text-white py-2 rounded-xl hover:bg-brown-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+          className="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-200 shadow-lg hover:shadow-purple-500/25 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           onClick={handleReset}
           disabled={isLoading}
         >

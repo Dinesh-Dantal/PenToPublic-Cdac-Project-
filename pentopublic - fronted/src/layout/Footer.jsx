@@ -1,14 +1,30 @@
 const Footer = () => (
-  <footer className="bg-gradient-to-r from-gray-50 via-blue-50 to-indigo-50 text-center text-sm py-6 border-t border-blue-100 backdrop-blur-sm">
+  <footer className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-center text-sm py-6 border-t border-gray-700 backdrop-blur-sm">
     <div className="container mx-auto px-4">
-      <p className="text-gray-600 font-medium">
-        © 2025{" "}
-        <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent font-bold">
+      {/* Main Text */}
+      <p className="text-gray-300 font-medium">
+        © {new Date().getFullYear()}{" "}
+        <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent font-bold">
           PenToPublic
         </span>
         . All rights reserved.
       </p>
-      <div className="mt-2 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent opacity-50"></div>
+
+      {/* Decorative Line */}
+      <div className="mt-3 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent opacity-50"></div>
+
+      {/* Optional Links */}
+      <div className="mt-3 flex flex-wrap justify-center gap-4 text-gray-400 text-xs">
+        <a href="/privacy" className="hover:text-blue-400 transition-colors">
+          Privacy Policy
+        </a>
+        <a href="/terms" className="hover:text-blue-400 transition-colors">
+          Terms of Service
+        </a>
+        <a href="/contact" className="hover:text-blue-400 transition-colors">
+          Contact Us
+        </a>
+      </div>
     </div>
   </footer>
 );

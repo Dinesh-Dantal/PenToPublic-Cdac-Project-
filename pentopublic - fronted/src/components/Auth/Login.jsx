@@ -13,39 +13,36 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [theme, setTheme] = useState('light'); // State for theme
+  const [theme, setTheme] = useState("light");
 
-  // Effect to set initial theme from localStorage or system preference
   useEffect(() => {
-    const storedTheme = localStorage.getItem('theme');
+    const storedTheme = localStorage.getItem("theme");
     if (storedTheme) {
       setTheme(storedTheme);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("dark");
     }
   }, []);
 
-  // Effect to apply theme class to documentElement and save to localStorage
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem('theme', theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Function to toggle theme
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  // Validation functions
   const validateUsername = (username) => {
     if (!username) return "Username is required";
     if (username.length < 3) return "Username must be at least 3 characters";
     if (username.length > 20) return "Username must be less than 20 characters";
-    if (!/^[a-zA-Z0-9_.-]+$/.test(username)) return "Username can only contain letters, numbers, dots, hyphens, and underscores";
+    if (!/^[a-zA-Z0-9_.-]+$/.test(username))
+      return "Username can only contain letters, numbers, dots, hyphens, and underscores";
     return "";
   };
 
@@ -69,35 +66,23 @@ const Login = () => {
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
-    
-    // Clear field error when user starts typing
     if (fieldErrors[field]) {
       setFieldErrors({ ...fieldErrors, [field]: "" });
     }
-    
-    // Clear general error
     if (error) setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
-    // Validate form
-    if (!validateForm()) {
-      return;
-    }
-
+    if (!validateForm()) return;
     setIsLoading(true);
 
     try {
       const res = await loginApi(formData);
       const userRole = res.data.role;
-
-      // Save user and token to context + localStorage
       login({ userName: formData.userName, role: userRole }, res.data.token);
 
-      // Redirect user based on role
       switch (userRole) {
         case "reader":
           navigate("/reader-dashboard");
@@ -127,31 +112,31 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-off-white-light dark:bg-brown-dark flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex items-center justify-center px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-brown-700 shadow-md rounded-2xl p-6 w-full max-w-sm space-y-4"
+        className="bg-white/70 dark:bg-slate-800/80 backdrop-blur-md shadow-lg rounded-2xl p-6 w-full max-w-sm space-y-4 border border-slate-300 dark:border-slate-700"
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-serif font-bold text-brown-dark dark:text-off-white">Login</h2>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            Login
+          </h2>
           <button
             type="button"
             onClick={toggleTheme}
-            className="p-2 rounded-full text-brown-dark dark:text-off-white hover:bg-brown-100 dark:hover:bg-brown-600 transition-colors duration-200"
+            className="p-2 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
           >
-            {theme === 'dark' ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+            {theme === "dark" ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
           </button>
         </div>
-        
-        {/* General Error */}
+
         {error && (
-          <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded-lg flex items-center space-x-2">
+          <div className="bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded-lg flex items-center space-x-2">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span className="text-sm">{error}</span>
           </div>
         )}
 
-        {/* Username Field */}
         <div>
           <input
             type="text"
@@ -159,11 +144,11 @@ const Login = () => {
             value={formData.userName}
             onChange={(e) => handleInputChange("userName", e.target.value)}
             className={`w-full px-4 py-2 border rounded-lg transition-colors 
-              ${fieldErrors.userName 
-                ? "border-red-500 bg-red-50 dark:bg-red-900 focus:border-red-500 focus:ring-red-200" 
-                : "border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-brown-600"
+              ${fieldErrors.userName
+                ? "border-red-500 bg-red-50 dark:bg-red-900 focus:border-red-500 focus:ring-red-200"
+                : "border-slate-300 dark:border-slate-600 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-200"
               } 
-              bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white focus:outline-none focus:ring-2`}
+              bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2`}
             required
           />
           {fieldErrors.userName && (
@@ -174,7 +159,6 @@ const Login = () => {
           )}
         </div>
 
-        {/* Password Field */}
         <div>
           <div className="relative">
             <input
@@ -183,23 +167,19 @@ const Login = () => {
               value={formData.password}
               onChange={(e) => handleInputChange("password", e.target.value)}
               className={`w-full px-4 py-2 pr-12 border rounded-lg transition-colors 
-                ${fieldErrors.password 
-                  ? "border-red-500 bg-red-50 dark:bg-red-900 focus:border-red-500 focus:ring-red-200" 
-                  : "border-brown-300 dark:border-brown-500 focus:border-brown-500 dark:focus:border-brown-400 focus:ring-brown-200 dark:focus:ring-brown-600"
+                ${fieldErrors.password
+                  ? "border-red-500 bg-red-50 dark:bg-red-900 focus:border-red-500 focus:ring-red-200"
+                  : "border-slate-300 dark:border-slate-600 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-200"
                 } 
-                bg-off-white dark:bg-brown-800 text-brown-dark dark:text-off-white focus:outline-none focus:ring-2`}
+                bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2`}
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-brown-500 dark:text-brown-300 hover:text-brown-700 dark:hover:text-brown-100 focus:outline-none"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-100"
             >
-              {showPassword ? (
-                <EyeOff className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
           {fieldErrors.password && (
@@ -211,10 +191,10 @@ const Login = () => {
         </div>
 
         <div className="flex justify-between text-sm">
-          <Link to="/forgot-password" className="text-brown-600 dark:text-brown-400 hover:underline">
+          <Link to="/forgot-password" className="text-blue-500 hover:underline">
             Forgot Password?
           </Link>
-          <Link to="/register" className="text-brown-600 dark:text-brown-400 hover:underline">
+          <Link to="/register" className="text-blue-500 hover:underline">
             Create Account
           </Link>
         </div>
@@ -222,7 +202,7 @@ const Login = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-brown-600 text-white py-2 rounded-xl hover:bg-brown-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+          className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-2 rounded-xl hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-purple-500/30"
         >
           {isLoading ? (
             <>

@@ -19,7 +19,7 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 - AutoMapper
 
 ### 🗃 Database
-- MySQL or PostgreSQL
+- SQL Server with Entity Framework Core
 
 ### ☁ Deployment
 - Docker (Multi-container)
@@ -42,8 +42,12 @@ Bookies is a full-stack web application that allows **Authors** to publish books
 - 🔐 Secure Login (JWT) with Role-based Access
 - 📖 Book Publishing, Renting & Buying
 - 📊 Track Reading Progress (% read)
-- 💳 Payment Integration (Mock/Stripe-ready)
+- 💳 Payment Integration (Razorpay)
 - 📚 Book Categorization
 - 🧾 Admin Analytics Dashboard
+
+## Demo Link
+http://pentopublic-00.s3-website.eu-north-1.amazonaws.com/
+
 
 

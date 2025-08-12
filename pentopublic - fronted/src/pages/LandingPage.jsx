@@ -267,7 +267,7 @@ const LandingPage = () => {
             Connecting authors and readers through the power of storytelling.
           </p>
           <p className="text-sm">
-            © 2024 PenToPublic. All rights reserved.
+            © 2025 PenToPublic. All rights reserved.
           </p>
         </div>
       </footer>
